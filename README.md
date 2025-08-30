@@ -20,7 +20,7 @@ Even if OSTree and BootC are not linked directly, they complement each other and
 
 Each time your upgrade or install packages, it will generate a new version of the filesystem tree, allowing you to easily roll back to a previous state if needed.
 
-![alt text](image.png)
+![alt text](img/ostree.png)
 
 This behavior is quite similar as `git`, where each commit creates a new version of the codebase, allowing you to easily revert to a previous state if needed or `nix` where each build generates a new version of the package.
 
