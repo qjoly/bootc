@@ -10,5 +10,7 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-
-        - run: podman machine set --rootful
+        - run: |
+            podman machine init
+            podman machine set --rootful
+        - uses: actions/checkout@v5
