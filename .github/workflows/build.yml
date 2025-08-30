@@ -10,10 +10,10 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-        - name: Set up QEMU
-          uses: docker/setup-qemu-action@v3
 
         - run: |
+            sudo apt-get update
+            sudo apt-get install qemu-system
             podman machine init
             podman machine set --rootful
     
