@@ -42,4 +42,8 @@ jobs:
                 --use-librepo=True \
                 localhost/bootc:latest --rootfs xfs
 
-        - run: ls -lah output
+        - name: Upload a Build Artifact
+          uses: actions/upload-artifact@v4.6.2
+          with:
+            name: "Anaconda ISO"
+            path: "output/bootiso/install.iso"
