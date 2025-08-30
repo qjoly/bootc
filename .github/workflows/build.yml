@@ -16,8 +16,8 @@ jobs:
             sudo apt-get install qemu-system
             #sudo podman machine init
             #sudo podman machine set --rootful
-            sudo podman machine start
-            sudo podman system connection list
+            #sudo podman machine start
+            #sudo podman system connection list
     
         - uses: actions/checkout@v5
 
