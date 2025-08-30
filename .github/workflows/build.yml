@@ -11,4 +11,4 @@ jobs:
         runs-on: ubuntu-latest
         steps:
 
-        - run: podman version
+        - run: podman machine set --rootful
