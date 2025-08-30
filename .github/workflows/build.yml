@@ -23,7 +23,7 @@ jobs:
 
         - run: |
             mkdir -p output
-            mkdir -p /var/lib/containers/storage
+            sudo mkdir -p /var/lib/containers/storage
             podman run \
                 --rm \
                 -it \
