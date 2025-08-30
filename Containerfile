@@ -10,7 +10,7 @@ RUN dnf install -y ${BASE_PKG} && \
     dnf clean all
 RUN dnf install -y ecryptfs-utils
 RUN groupadd -g 1000 qjoly || true \
-    && useradd -m -u 1000 -g 1000 -s /bin/zsh -K MAIL_DIR=/dev/null qjoly \
+    && useradd -m -u 1000 -g 1000 -G wheel -s /bin/zsh -K MAIL_DIR=/dev/null qjoly \
     && echo 'qjoly:changeme' | chpasswd \
     && mkdir -p /home/qjoly \
     && chown qjoly:qjoly /home/qjoly \
