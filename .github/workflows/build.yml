@@ -22,6 +22,8 @@ jobs:
         - run: podman build -t bootc .
 
         - run: |
+            mkdir -p output
+            mkdir -p /var/lib/containers/storage
             podman run \
                 --rm \
                 -it \
