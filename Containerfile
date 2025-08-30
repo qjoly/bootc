@@ -1,4 +1,6 @@
 FROM quay.io/fedora/fedora-bootc:latest
+ENV USERNAME=qjoly
+ENV DEFAULT_PASSWORD=changeme
 # Enable RPM Fusion repositories
 # https://rpmfusion.org/
 RUN dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
@@ -9,15 +11,15 @@ ENV BASE_PKG="tmux gnome-shell unzip neovim htop qemu-guest-agent ghostty distro
 RUN dnf install -y ${BASE_PKG} && \
     dnf clean all
 RUN dnf install -y ecryptfs-utils
-RUN groupadd -g 1000 qjoly || true \
-    && useradd -m -u 1000 -g 1000 -G wheel -s /bin/zsh -K MAIL_DIR=/dev/null qjoly \
-    && echo 'qjoly:changeme' | chpasswd \
-    && mkdir -p /home/qjoly \
-    && chown qjoly:qjoly /home/qjoly \
-    && chmod 700 /home/qjoly \
+RUN groupadd -g 1000 ${GROUPNAME} || true \
+    && useradd -m -u 1000 -g 1000 -G wheel -s /bin/zsh -K MAIL_DIR=/dev/null ${USERNAME} \
+    && echo "${USERNAME}:${DEFAULT_PASSWORD}" | chpasswd \
+    && mkdir -p /home/${USERNAME} \
+    && chown ${USERNAME}:${USERNAME} /home/${USERNAME} \
+    && chmod 700 /home/${USERNAME} \
     && echo 'ecryptfs' >> /etc/modules-load.d/ecryptfs.conf
-ADD --chown=1000:1000 home /home/qjoly/
-# su - qjoly -c "ecryptfs-migrate-home -u qjoly"
+ADD --chown=1000:1000 home /home/${USERNAME}/
+# "sudo ecryptfs-migrate-home -u ${USERNAME}"
 RUN systemctl set-default graphical.target
 ADD usr usr
 ADD etc etc
