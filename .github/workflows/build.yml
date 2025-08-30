@@ -14,7 +14,7 @@ jobs:
         - run: |
             sudo apt-get update
             sudo apt-get install qemu-system
-            sudo podman machine init
+            #sudo podman machine init
             sudo podman machine set --rootful
             sudo podman machine start
             sudo podman system connection list
