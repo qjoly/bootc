@@ -25,7 +25,7 @@ jobs:
         - run: |
             mkdir -p output
             sudo mkdir -p /var/lib/containers/storage
-            sudo chown -R $USER:$USER /var/lib/containers/storage
+            sudo chown -R $USER:$USER /var/lib/containers/
             ls -hal /var/lib/containers/storage
             podman run \
                 --rm \
