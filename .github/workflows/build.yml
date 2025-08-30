@@ -24,6 +24,7 @@ jobs:
         - run: |
             mkdir -p output
             sudo mkdir -p /var/lib/containers/storage
+            sudo chown -R $USER:$USER /var/lib/containers/storage
             podman run \
                 --rm \
                 -it \
@@ -36,6 +37,6 @@ jobs:
                 quay.io/centos-bootc/bootc-image-builder:latest \
                 --type anaconda-iso \
                 --use-librepo=True \
-                localhost/test-bootc:latest --rootfs xfs
+                localhost/bootc:latest --rootfs xfs
 
         - run: ls -lah output
