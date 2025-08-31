@@ -34,7 +34,7 @@ ADD etc etc
 RUN dconf update
 ADD  --chown=0:0 home/.ssh /root/
 RUN curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
-    sh -s -- install ostree --no-confirm --persistence=/var/lib/nix
+    sh -s -- install ostree --no-confirm --persistence=/var/lib/nix --no-start-daemon
 
 # -- Finalize container setup --
 RUN systemctl set-default graphical.target
