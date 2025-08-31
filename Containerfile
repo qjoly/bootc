@@ -1,6 +1,7 @@
 FROM quay.io/fedora/fedora-bootc:latest
-ENV USERNAME=qjoly
-ENV PASSWORD=changeme
+
+ARG USERNAME
+ARG PASSWORD
 
 # -- Package installation --
 ## Enable RPM Fusion repositories
@@ -10,7 +11,7 @@ RUN dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-rele
 ## Add Ghostty repository
 RUN . /etc/os-release; curl -fsSL "https://copr.fedorainfracloud.org/coprs/scottames/ghostty/repo/fedora-${VERSION_ID}/scottames-ghostty-fedora-${VERSION_ID}.repo" | tee /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo
 
-ENV BASE_PKG="tmux gnome-shell unzip neovim htop qemu-guest-agent ghostty distrobox flatpak @base-graphical @container-management @hardware-support @gnome-desktop @guest-desktop-agents zsh sway zsh rsync"
+ENV BASE_PKG="tmux gnome-shell unzip neovim htop qemu-guest-agent ghostty distrobox flatpak @base-graphical @container-management @hardware-support @gnome-desktop @guest-desktop-agents zsh sway rsync"
 RUN dnf install -y ${BASE_PKG} && \
     dnf clean all
 
@@ -32,6 +33,8 @@ ADD usr usr
 ADD etc etc
 RUN dconf update
 ADD  --chown=0:0 home/.ssh /root/
+RUN curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
+    sh -s -- install ostree --no-confirm --persistence=/var/lib/nix
 
 # -- Finalize container setup --
 RUN systemctl set-default graphical.target
