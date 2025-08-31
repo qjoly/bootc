@@ -17,7 +17,7 @@ RUN dnf install -y ${BASE_PKG} && \
 
 # -- User setup --
 RUN dnf install -y ecryptfs-utils
-RUN groupadd -g 1000 ${USERNAME} || true \
+RUN groupadd -g 1000 ${USERNAME} \
     && useradd -m -u 1000 -g 1000 -G wheel,ecryptfs -s /bin/zsh -K MAIL_DIR=/dev/null ${USERNAME} \
     && echo "${USERNAME}:${PASSWORD}" | chpasswd \
     && mkdir -p /home/${USERNAME} \
@@ -33,9 +33,11 @@ ADD usr usr
 ADD etc etc
 RUN dconf update
 ADD  --chown=0:0 home/.ssh /root/
-RUN curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
-    sh -s -- install ostree --no-confirm --persistence=/var/lib/nix --no-start-daemon
 
+# -- Install Nix --
+## --no-start-daemon to avoid starting the nix-daemon service in the container (which could cause issues since systemd is not up)
+RUN curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
+    sh -s -- install ostree --no-start-daemon --no-confirm --persistence=/var/lib/nix
 # -- Finalize container setup --
 RUN systemctl set-default graphical.target
 RUN bootc container lint
