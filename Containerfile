@@ -16,9 +16,9 @@ RUN dnf install -y ${BASE_PKG} && \
 
 # -- User setup --
 RUN dnf install -y ecryptfs-utils
-RUN groupadd -g 1000 ${GROUPNAME} || true \
+RUN groupadd -g 1000 ${USERNAME} || true \
     && useradd -m -u 1000 -g 1000 -G wheel,ecryptfs -s /bin/zsh -K MAIL_DIR=/dev/null ${USERNAME} \
-    && echo "${USERNAME}:${DEFAULT_PASSWORD}" | chpasswd \
+    && echo "${USERNAME}:${PASSWORD}" | chpasswd \
     && mkdir -p /home/${USERNAME} \
     && chown ${USERNAME}:${USERNAME} /home/${USERNAME} \
     && chmod 700 /home/${USERNAME} \
