@@ -38,7 +38,7 @@ ADD  --chown=0:0 home/.ssh /root/
 ENV NIX_INSTALLER_START_DAEMON=false
 ## --no-start-daemon to avoid starting the nix-daemon service in the container (which could cause issues since systemd is not up)
 RUN curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
-    NIX_INSTALLER_START_DAEMON=false sh -s -- install ostree --no-confirm --persistence=/var/lib/nix
+    sh -s -- install ostree --no-confirm --no-start-daemon --persistence=/var/lib/nix
 # -- Finalize container setup --
 RUN systemctl set-default graphical.target
 RUN bootc container lint
