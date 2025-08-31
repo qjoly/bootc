@@ -1,8 +1,5 @@
 FROM quay.io/fedora/fedora-bootc:latest
 
-ARG USERNAME
-ARG PASSWORD
-
 # -- Package installation --
 ## Enable RPM Fusion repositories
 ## https://rpmfusion.org/
@@ -11,12 +8,14 @@ RUN dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-rele
 ## Add Ghostty repository
 RUN . /etc/os-release; curl -fsSL "https://copr.fedorainfracloud.org/coprs/scottames/ghostty/repo/fedora-${VERSION_ID}/scottames-ghostty-fedora-${VERSION_ID}.repo" | tee /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo
 
-ENV BASE_PKG="tmux gnome-shell unzip neovim htop qemu-guest-agent ghostty distrobox flatpak @base-graphical @container-management @hardware-support @gnome-desktop @guest-desktop-agents zsh sway rsync"
+ENV BASE_PKG="tmux gnome-shell unzip neovim htop qemu-guest-agent ghostty distrobox flatpak @base-graphical @container-management @hardware-support @gnome-desktop @guest-desktop-agents zsh sway rsync niri ecryptfs-utils swaylock"
 RUN dnf install -y ${BASE_PKG} && \
     dnf clean all
 
 # -- User setup --
-RUN dnf install -y ecryptfs-utils
+ARG USERNAME
+ARG PASSWORD
+
 RUN groupadd -g 1000 ${USERNAME} \
     && useradd -m -u 1000 -g 1000 -G wheel,ecryptfs -s /bin/zsh -K MAIL_DIR=/dev/null ${USERNAME} \
     && echo "${USERNAME}:${PASSWORD}" | chpasswd \
@@ -32,7 +31,7 @@ ADD --chown=1000:1000 home /home/${USERNAME}/
 ADD usr usr
 ADD etc etc
 RUN dconf update
-ADD  --chown=0:0 home/.ssh /root/
+ADD  --chown=0:0 home/.ssh /root/.ssh
 
 RUN mkdir -p /nix && touch /nix/.keep
 
