@@ -30,7 +30,9 @@ add_flathub_repo
 
 FLATPAK_APPS=(
     "org.mozilla.firefox"
-    "com.discordapp.Discord"
+    "app.zen_browser.zen"
+    "com.obsproject.Studio"
+    "dev.vencord.Vesktop"
     "org.mozilla.Thunderbird"
     "com.spotify.Client"
 )
