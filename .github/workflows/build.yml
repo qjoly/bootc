@@ -1,46 +1,45 @@
 name: CI
 
 on:
-    push:
-        branches: [ main ]
-    pull_request:
-        branches: [ main ]
+  push:
+  pull_request:
+    branches: [main]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          sudo apt-get update
+          sudo apt-get install qemu-system
 
-        - run: |
-            sudo apt-get update
-            sudo apt-get install qemu-system
-    
-        - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
 
-        - run: |
-            sudo podman build \
-                --build-arg USERNAME=${{ secrets.USERNAME }} \
-                --build-arg PASSWORD=${{ secrets.PASSWORD }} \
-                -t bootc .
+      - run: |
+          sudo podman build \
+              --build-arg USERNAME=${{ secrets.USERNAME }} \
+              --build-arg PASSWORD=${{ secrets.PASSWORD }} \
+              -t bootc .
 
-        - run: |
-            mkdir -p output
-            sudo mkdir -p /var/lib/containers/storage
-            sudo podman run \
-                --rm \
-                -it \
-                --privileged \
-                --pull=newer \
-                --security-opt label=type:unconfined_t \
-                -v /var/lib/containers/storage:/var/lib/containers/storage \
-                -v ./output:/output \
-                quay.io/centos-bootc/bootc-image-builder:latest \
-                --type anaconda-iso \
-                --use-librepo=True \
-                localhost/bootc:latest --rootfs xfs
+      - run: |
+          mkdir -p output
+          sudo mkdir -p /var/lib/containers/storage
+          sudo podman run \
+              --rm \
+              -it \
+              --privileged \
+              --pull=newer \
+              --security-opt label=type:unconfined_t \
+              -v /var/lib/containers/storage:/var/lib/containers/storage \
+              -v ./output:/output \
+              quay.io/centos-bootc/bootc-image-builder:latest \
+              --type anaconda-iso \
+              --use-librepo=True \
+              localhost/bootc:latest --rootfs xfs
 
-        - name: Upload a Build Artifact
-          uses: actions/upload-artifact@v4.6.2
-          with:
-            name: "Anaconda ISO"
-            path: "output/bootiso/install.iso"
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: "Anaconda ISO"
+          path: "output/bootiso/install.iso"
+
