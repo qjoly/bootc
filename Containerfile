@@ -8,7 +8,7 @@ RUN dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-rele
 ## Add Ghostty repository
 RUN . /etc/os-release; curl -fsSL "https://copr.fedorainfracloud.org/coprs/scottames/ghostty/repo/fedora-${VERSION_ID}/scottames-ghostty-fedora-${VERSION_ID}.repo" | tee /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo
 
-ENV BASE_PKG="tmux gnome-shell unzip neovim htop qemu-guest-agent ghostty distrobox flatpak @container-management @hardware-support @guest-desktop-agents zsh rsync niri ecryptfs-utils swaylock dconf gdm nautilus polkit avahi xdg-desktop-portal"
+ENV BASE_PKG="tmux gnome-shell unzip neovim htop qemu-guest-agent ghostty distrobox flatpak @container-management @hardware-support @guest-desktop-agents zsh rsync niri ecryptfs-utils swaylock dconf gdm nautilus polkit avahi xdg-desktop-portal @gnome-desktop"
 RUN dnf install -y ${BASE_PKG} && \
     dnf clean all
 
