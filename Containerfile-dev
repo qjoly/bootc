@@ -1,0 +1,15 @@
+FROM quay.io/fedora/fedora-bootc:latest
+
+RUN dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+ENV BASE_PKG="tmux gnome-shell unzip qemu-guest-agent flatpak @guest-desktop-agents zsh rsync ecryptfs-utils"
+RUN dnf install -y ${BASE_PKG} && \
+    dnf clean all
+
+ADD  --chown=0:0 home/.ssh /root/.ssh
+RUN sed -i 's/^\(PasswordAuthentication\s*\).*$/\1yes/' /etc/ssh/sshd_config
+RUN sed -i 's/^\(PermitRootLogin\s*\).*$/\1yes/' /etc/ssh/sshd_config
+
+# -- Finalize container setup --
+RUN systemctl set-default graphical.target
+RUN bootc container lint
